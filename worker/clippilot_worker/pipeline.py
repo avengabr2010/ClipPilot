@@ -28,7 +28,8 @@ class UserFacingError(RuntimeError):
 
 
 def now_iso(delta_days: float = 0) -> str:
-    return (datetime.now(timezone.utc) + timedelta(days=delta_days)).isoformat()
+    # "Z" suffix (not "+00:00"): a raw "+" would be decoded as a space in PostgREST query strings.
+    return (datetime.now(timezone.utc) + timedelta(days=delta_days)).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 
 class JobContext:

@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { publicEnv, isSupabaseConfigured } from "@/lib/public-env";
 
-const PROTECTED = ["/dashboard", "/create", "/projects", "/clips", "/billing", "/settings", "/admin", "/onboarding"];
+const PROTECTED = ["/dashboard", "/create", "/projects", "/clips", "/billing", "/settings", "/admin"];
 const AUTH_PAGES = ["/login", "/signup"];
 
 /** Refreshes the Supabase session cookie and protects app routes. */

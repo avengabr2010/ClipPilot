@@ -34,16 +34,19 @@ export function Label({ className, ...props }: React.LabelHTMLAttributes<HTMLLab
   return <label className={cn("text-sm font-medium leading-none", className)} {...props} />;
 }
 
+const CHEVRON =
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'><path d='m6 9 6 6 6-6'/></svg>\")";
+
 export const NativeSelect = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement>>(
   ({ className, children, ...props }, ref) => (
     <select
       ref={ref}
       className={cn(
-        "flex h-11 w-full appearance-none rounded-lg border border-input bg-background bg-[length:16px] bg-[right_0.75rem_center] bg-no-repeat px-3 pr-9 text-base focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-0 sm:h-10 sm:text-sm",
-        "bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23888%22 stroke-width=%222%22><path d=%22m6 9 6 6 6-6%22/></svg>')]",
+        "flex h-11 w-full appearance-none rounded-lg border border-input bg-background px-3 pr-9 text-base focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-0 sm:h-10 sm:text-sm",
         className,
       )}
       {...props}
+      style={{ backgroundImage: CHEVRON, backgroundRepeat: "no-repeat", backgroundPosition: "right 0.75rem center", backgroundSize: 16, ...props.style }}
     >
       {children}
     </select>

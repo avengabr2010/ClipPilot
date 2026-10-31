@@ -287,7 +287,7 @@ export function CreateWizard({
                     <div className="grid grid-cols-3 gap-2">
                       {ASPECTS.map((a) => (
                         <Button key={a} type="button" variant={settings.aspect === a ? "default" : "outline"} onClick={() => set("aspect", a)}>
-                          <span className={cn("inline-block rounded-sm border-2 border-current", a === "9:16" ? "h-4 w-2.5" : a === "1:1" ? "size-3.5" : "h-2.5 w-4")} />
+                          <span className={cn("inline-block rounded-[3px] border-2 border-current", a === "9:16" ? "h-4 w-2.5" : a === "1:1" ? "size-3.5" : "h-2.5 w-4")} />
                           {a}
                         </Button>
                       ))}
