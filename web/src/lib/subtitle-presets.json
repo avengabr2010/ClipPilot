@@ -1,0 +1,51 @@
+[
+  {
+    "id": "classic",
+    "name": "Classique",
+    "tier": "free",
+    "description": "Blanc, contour noir, lisible partout.",
+    "style": { "font": "Inter", "size": 0.045, "weight": 800, "color": "#FFFFFF", "highlightColor": "#FFFFFF", "outlineColor": "#000000", "outlineWidth": 3, "background": false, "backgroundColor": "#000000", "position": "bottom", "uppercase": false, "animation": "none", "wordsPerLine": 5, "highlightKeywords": false }
+  },
+  {
+    "id": "bold",
+    "name": "Bold",
+    "tier": "starter",
+    "description": "Majuscules massives, mot actif en violet.",
+    "style": { "font": "Inter Display", "size": 0.055, "weight": 900, "color": "#FFFFFF", "highlightColor": "#A78BFA", "outlineColor": "#000000", "outlineWidth": 4, "background": false, "backgroundColor": "#000000", "position": "middle", "uppercase": true, "animation": "word", "wordsPerLine": 3, "highlightKeywords": true }
+  },
+  {
+    "id": "minimal",
+    "name": "Minimal",
+    "tier": "starter",
+    "description": "Discret, fond translucide.",
+    "style": { "font": "Inter", "size": 0.036, "weight": 600, "color": "#FFFFFF", "highlightColor": "#FFFFFF", "outlineColor": "#000000", "outlineWidth": 0, "background": true, "backgroundColor": "#111111", "position": "bottom", "uppercase": false, "animation": "none", "wordsPerLine": 6, "highlightKeywords": false }
+  },
+  {
+    "id": "karaoke",
+    "name": "Karaoké",
+    "tier": "creator",
+    "description": "Chaque mot s'illumine au moment où il est prononcé.",
+    "style": { "font": "Inter Display", "size": 0.05, "weight": 900, "color": "#FFFFFF", "highlightColor": "#FACC15", "outlineColor": "#000000", "outlineWidth": 4, "background": false, "backgroundColor": "#000000", "position": "middle", "uppercase": true, "animation": "karaoke", "wordsPerLine": 4, "highlightKeywords": true }
+  },
+  {
+    "id": "podcast",
+    "name": "Podcast",
+    "tier": "creator",
+    "description": "Bloc sombre arrondi, idéal pour les interviews.",
+    "style": { "font": "Inter", "size": 0.04, "weight": 700, "color": "#F5F3FF", "highlightColor": "#C4B5FD", "outlineColor": "#000000", "outlineWidth": 0, "background": true, "backgroundColor": "#1E1B4B", "position": "bottom", "uppercase": false, "animation": "karaoke", "wordsPerLine": 6, "highlightKeywords": true }
+  },
+  {
+    "id": "gaming",
+    "name": "Gaming",
+    "tier": "creator",
+    "description": "Vert néon, effet pop, très percutant.",
+    "style": { "font": "Inter Display", "size": 0.058, "weight": 900, "color": "#FFFFFF", "highlightColor": "#4ADE80", "outlineColor": "#052E16", "outlineWidth": 5, "background": false, "backgroundColor": "#000000", "position": "middle", "uppercase": true, "animation": "pop", "wordsPerLine": 2, "highlightKeywords": true }
+  },
+  {
+    "id": "editorial",
+    "name": "Éditorial",
+    "tier": "creator",
+    "description": "Élégant, pour le contenu éducatif.",
+    "style": { "font": "DejaVu Sans", "size": 0.04, "weight": 700, "color": "#FFFFFF", "highlightColor": "#F472B6", "outlineColor": "#000000", "outlineWidth": 2, "background": false, "backgroundColor": "#000000", "position": "bottom", "uppercase": false, "animation": "word", "wordsPerLine": 5, "highlightKeywords": true }
+  }
+]

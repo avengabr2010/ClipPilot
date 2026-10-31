@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 248 24% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 248 24% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 248 24% 9%;
+    --primary: 256 88% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 250 20% 96%;
+    --secondary-foreground: 248 24% 12%;
+    --muted: 250 18% 96%;
+    --muted-foreground: 248 8% 40%;
+    --accent: 256 60% 96%;
+    --accent-foreground: 256 70% 40%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 60% 36%;
+    --success-foreground: 0 0% 100%;
+    --warning: 36 92% 44%;
+    --warning-foreground: 0 0% 100%;
+    --border: 250 14% 90%;
+    --input: 250 14% 88%;
+    --ring: 256 88% 58%;
+    --radius: 0.75rem;
+    --grid: 250 14% 92%;
+  }
+  .dark {
+    --background: 248 30% 3.5%;
+    --foreground: 250 20% 96%;
+    --card: 248 24% 6.5%;
+    --card-foreground: 250 20% 96%;
+    --popover: 248 24% 7.5%;
+    --popover-foreground: 250 20% 96%;
+    --primary: 258 100% 68%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 248 18% 11%;
+    --secondary-foreground: 250 20% 94%;
+    --muted: 248 18% 10%;
+    --muted-foreground: 250 8% 64%;
+    --accent: 258 40% 14%;
+    --accent-foreground: 258 100% 82%;
+    --destructive: 0 72% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 58% 46%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 56%;
+    --warning-foreground: 248 30% 6%;
+    --border: 248 16% 14%;
+    --input: 248 16% 16%;
+    --ring: 258 100% 68%;
+    --grid: 248 16% 9%;
+  }
+  * { @apply border-border; }
+  html { -webkit-tap-highlight-color: transparent; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+    overflow-x: hidden;
+  }
+  h1, h2, h3 { @apply font-display tracking-tight; text-wrap: balance; }
+  p { text-wrap: pretty; }
+  :focus-visible { @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background; }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(100deg, hsl(var(--foreground)) 20%, hsl(var(--primary)) 60%, hsl(290 90% 70%) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--grid)) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--grid)) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 40%, transparent 100%);
+  }
+  .glow-top {
+    background: radial-gradient(60% 50% at 50% 0%, hsl(var(--primary) / 0.22), transparent 70%);
+  }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
