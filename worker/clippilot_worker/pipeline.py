@@ -286,6 +286,14 @@ def process_video(db: Supabase, cfg: Config, job: dict, ctx: JobContext) -> dict
         shutil.rmtree(work, ignore_errors=True)
 
 
+def merge_words(transcript: list[dict], edited: list[dict]) -> list[dict]:
+    if not edited:
+        return transcript
+    a, b = float(edited[0]["start"]), float(edited[-1]["end"])
+    keep = [w for w in transcript if float(w["end"]) <= a or float(w["start"]) >= b]
+    return sorted(keep + edited, key=lambda w: float(w["start"]))
+
+
 def render_existing_clip(db: Supabase, cfg: Config, job: dict, ctx: JobContext) -> dict:
     clip = db.select_one("clips", f"id=eq.{job['clip_id']}&select=*")
     if not clip:
@@ -312,8 +320,9 @@ def render_existing_clip(db: Supabase, cfg: Config, job: dict, ctx: JobContext) 
         if mode == "auto":
             ctx.update(20, "reframing")
             kf = _keyframes(cfg, src, start, end, aspect, probe, _flag(db, "speaker_tracking", True))
-        # Edited words are stored with absolute timestamps (same as the transcript).
-        words_src = edit.get("subtitle_words") or (tr or {}).get("words") or []
+        # Edited words are stored with absolute timestamps (same as the transcript) and
+        # replace the transcript inside the span they cover.
+        words_src = merge_words((tr or {}).get("words") or [], edit.get("subtitle_words") or [])
         style = resolve_style(edit.get("template") or "classic", edit.get("subtitle_style") or None)
         spec = RenderSpec(start=start, end=end, aspect=aspect, resolution=resolution, style=style,
                           words=words_for_clip(words_src, start, end), subtitles=bool(edit.get("subtitles_enabled", True)),

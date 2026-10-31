@@ -59,3 +59,12 @@ def test_words_for_clip_retimes():
 def test_grouping_respects_words_per_line():
     groups = group_words([SubWord(i * 0.3, i * 0.3 + 0.25, f"w{i}") for i in range(10)], 3)
     assert all(len(g) <= 3 for g in groups)
+
+
+def test_merge_words_replaces_only_edited_span():
+    from clippilot_worker.pipeline import merge_words
+    tr = [{"start": i, "end": i + 0.5, "text": f"w{i}"} for i in range(10)]
+    edited = [{"start": 3, "end": 3.5, "text": "X"}, {"start": 4, "end": 5.5, "text": "Y"}]
+    out = merge_words(tr, edited)
+    assert [w["text"] for w in out] == ["w0", "w1", "w2", "X", "Y", "w6", "w7", "w8", "w9"]
+    assert merge_words(tr, []) == tr

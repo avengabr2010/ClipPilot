@@ -18,7 +18,7 @@ const editSchema = z.object({
   resolution: z.union([z.literal(720), z.literal(1080)]),
   template: z.string().min(1).max(32),
   subtitlesEnabled: z.boolean(),
-  style: z.record(z.unknown()).optional(),
+  style: z.record(z.string(), z.unknown()).optional(),
   words: z.array(wordSchema).max(4000).optional(),
   crop: z.object({ mode: z.enum(["auto", "manual", "center"]), x: z.number().min(0).max(1).optional(), zoom: z.number().min(1).max(2).optional() }),
 });
