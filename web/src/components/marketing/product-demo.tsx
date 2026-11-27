@@ -81,7 +81,7 @@ export function ProductDemo() {
               <div className="mb-2 flex items-center gap-2 text-xs font-medium">
                 <Sparkles className="size-3.5 text-primary" /> Moments détectés
               </div>
-              <div className="relative flex h-14 items-center gap-[2px]">
+              <div className="relative mt-6 flex h-14 items-center gap-[2px]">
                 {BARS.map((h, i) => (
                   <div key={i} className="flex-1 rounded-full bg-muted-foreground/25" style={{ height: `${h}%` }} />
                 ))}
