@@ -4,11 +4,6 @@ on:
   push:
     tags: ["v*"]
   workflow_dispatch:
-    inputs:
-      app_url:
-        description: "URL HTTPS de ClipPilot en ligne (vide = demandée au premier lancement)"
-        required: false
-        default: ""
 
 permissions:
   contents: write
@@ -26,6 +21,14 @@ jobs:
         with:
           gradle-version: "8.10.2"
 
+      - name: Download offline speech model (Vosk, French)
+        run: |
+          curl -sSL -o /tmp/model.zip https://alphacephei.com/vosk/models/vosk-model-small-fr-0.22.zip
+          unzip -q /tmp/model.zip -d /tmp/model
+          mkdir -p android/app/src/main/assets
+          rm -rf android/app/src/main/assets/model-fr
+          mv /tmp/model/vosk-model-small-fr-0.22 android/app/src/main/assets/model-fr
+
       - name: Optional release keystore
         env:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -38,14 +41,13 @@ jobs:
       - name: Build APK
         working-directory: android
         env:
-          APP_URL: ${{ inputs.app_url || vars.APP_URL || '' }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          case "$VERSION" in [0-9]*) ;; *) VERSION="0.1.${GITHUB_RUN_NUMBER}" ;; esac
-          gradle --no-daemon assembleRelease -PappUrl="$APP_URL" -PversionName="$VERSION" -PversionCode="$GITHUB_RUN_NUMBER"
+          case "$VERSION" in [0-9]*) ;; *) VERSION="0.2.${GITHUB_RUN_NUMBER}" ;; esac
+          gradle --no-daemon assembleRelease -PversionName="$VERSION" -PversionCode="$GITHUB_RUN_NUMBER"
           cp app/build/outputs/apk/release/app-release.apk "$RUNNER_WORKSPACE/ClipPilot-$VERSION.apk"
           echo "APK=$RUNNER_WORKSPACE/ClipPilot-$VERSION.apk" >> "$GITHUB_ENV"
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
@@ -65,4 +67,5 @@ jobs:
             APK Android de ClipPilot.
 
             Installation : téléchargez le fichier `.apk` sur le téléphone, ouvrez-le, autorisez « Installer des applis inconnues » pour votre navigateur, puis installez.
-            Au premier lancement, l'application demande l'adresse HTTPS de votre ClipPilot en ligne (sauf si elle a été fournie au build).
+            Application 100 % locale : transcription (Vosk), analyse, recadrage (ML Kit) et montage (Media3) sur le téléphone. Aucune connexion Internet, aucun compte.
+            Android 10 minimum. Les clips sont enregistrés dans Galerie › Movies/ClipPilot.
