@@ -14,10 +14,9 @@ import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.Crop
 import androidx.media3.effect.OverlayEffect
-import androidx.media3.effect.OverlaySettings
 import androidx.media3.effect.Presentation
-import androidx.media3.effect.StaticOverlaySettings
 import androidx.media3.effect.TextOverlay
+import androidx.media3.effect.TextureOverlay
 import androidx.media3.transformer.Composition
 import androidx.media3.transformer.EditedMediaItem
 import androidx.media3.transformer.Effects
@@ -77,9 +76,6 @@ private class SubtitleOverlay(
         }
         return s
     }
-
-    override fun getOverlaySettings(presentationTimeUs: Long): OverlaySettings =
-        StaticOverlaySettings.Builder().setBackgroundFrameAnchor(0f, -0.55f).build()
 }
 
 object Renderer {
@@ -114,7 +110,7 @@ object Renderer {
             val rel = words.filter { it.end > clip.start && it.start < clip.end }
                 .map { Word(it.start - clip.start, it.end - clip.start, it.text) }
             if (rel.isNotEmpty()) {
-                effects.add(OverlayEffect(ImmutableList.of(SubtitleOverlay(groups(rel, style.perLine), style, outH, clip.start, clip.end - clip.start))))
+                effects.add(OverlayEffect(ImmutableList.of<TextureOverlay>(SubtitleOverlay(groups(rel, style.perLine), style, outH, clip.start, clip.end - clip.start))))
             }
         }
         val item = MediaItem.Builder().setUri(source).setClippingConfiguration(
