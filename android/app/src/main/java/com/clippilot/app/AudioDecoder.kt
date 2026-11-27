@@ -27,7 +27,8 @@ object AudioDecoder {
         var channels = fmt.getInteger(MediaFormat.KEY_CHANNEL_COUNT)
         val info = MediaCodec.BufferInfo()
         var inputDone = false
-        var pos = 0.0 // resampler position in input samples
+        var pos = 0.0 // resampler position in input samples (may be in [-1, 0) = previous chunk's last sample)
+        var prev = 0f
         var produced = 0L
         try {
             while (true) {
@@ -57,12 +58,13 @@ object AudioDecoder {
                     codec.releaseOutputBuffer(o, false)
                     val step = inRate.toDouble() / RATE
                     val out = ArrayList<Short>(frames)
-                    while (pos < frames - 1) {
-                        val i0 = pos.toInt(); val frac = pos - i0
-                        out.add((mono[i0] * (1 - frac) + mono[i0 + 1] * frac).toInt().coerceIn(-32768, 32767).toShort())
+                    fun at(i: Int) = if (i < 0) prev else mono[i]
+                    while (frames > 0 && pos < frames - 1) {
+                        val i0 = Math.floor(pos).toInt(); val frac = (pos - i0).toFloat()
+                        out.add((at(i0) * (1 - frac) + at(i0 + 1) * frac).toInt().coerceIn(-32768, 32767).toShort())
                         pos += step
                     }
-                    pos -= frames
+                    if (frames > 0) { pos -= frames; prev = mono[frames - 1] }
                     if (out.isNotEmpty()) {
                         produced += out.size
                         onChunk(out.toShortArray(), if (duration > 0) (produced.toDouble() / RATE / duration).coerceAtMost(1.0) else 0.0)
