@@ -72,7 +72,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun App(vm: ClipViewModel) {
     val ctx = LocalContext.current
-    LaunchedEffect(vm.error) { vm.error?.let { Toast.makeText(ctx, it, Toast.LENGTH_LONG).show() } }
+    vm.error?.let { msg ->
+        AlertDialog(onDismissRequest = { vm.error = null }, title = { Text("Oups") },
+            text = { Text(msg) }, confirmButton = { TextButton(onClick = { vm.error = null }) { Text("OK") } })
+    }
+    if (vm.loading) {
+        AlertDialog(onDismissRequest = {}, confirmButton = {}, title = { Text("Lecture de la vidéo…") },
+            text = { LinearProgressIndicator(Modifier.fillMaxWidth()) })
+    }
     val s = vm.screen
     BackHandler(enabled = s !is Screen.Home && s !is Screen.Processing) { vm.screen = Screen.Home }
     Box(Modifier.fillMaxSize().systemBarsPadding()) {

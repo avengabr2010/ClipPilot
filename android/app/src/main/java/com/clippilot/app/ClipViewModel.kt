@@ -33,6 +33,11 @@ class ClipViewModel(app: Application) : AndroidViewModel(app) {
     var progress by mutableStateOf(0f)
     var error by mutableStateOf<String?>(null)
     var busyClip by mutableStateOf<String?>(null)
+    var loading by mutableStateOf(false)
+
+    private fun describe(e: Throwable): String =
+        (e.message?.takeIf { it.isNotBlank() } ?: "Erreur inconnue") + "\n\n[" + e.javaClass.simpleName +
+            (e.cause?.let { " ← " + it.javaClass.simpleName + ": " + it.message } ?: "") + "]"
     private var job: Job? = null
 
     init { reload() }
@@ -43,13 +48,16 @@ class ClipViewModel(app: Application) : AndroidViewModel(app) {
 
     fun pick(uri: Uri) {
         error = null
+        loading = true
         viewModelScope.launch {
             try {
                 val info = withContext(Dispatchers.IO) { Reframer.info(ctx, uri) }
                 if (info.duration < 10) throw IllegalStateException("La vidéo doit durer au moins 10 secondes.")
-                screen = Screen.New(uri, displayName(uri), info.duration)
-            } catch (e: Exception) {
-                error = e.message ?: "Vidéo illisible."
+                screen = Screen.New(uri, runCatching { displayName(uri) }.getOrDefault("Vidéo"), info.duration)
+            } catch (e: Throwable) {
+                error = "Impossible de lire cette vidéo.\n" + describe(e)
+            } finally {
+                loading = false
             }
         }
     }
@@ -106,7 +114,7 @@ class ClipViewModel(app: Application) : AndroidViewModel(app) {
             } catch (e: kotlinx.coroutines.CancellationException) {
                 local.delete(); screen = Screen.Home; throw e
             } catch (e: Throwable) {
-                error = e.message ?: "Le traitement a échoué."
+                error = "Le traitement a échoué à l'étape « $stage ».\n" + describe(e)
                 if (project(id) == null) local.delete()
                 screen = Screen.Home
             }
@@ -126,7 +134,7 @@ class ClipViewModel(app: Application) : AndroidViewModel(app) {
                 clip.file = Renderer.render(ctx, src, info, clip, p.words, p.settings) {}.absolutePath
                 Store.save(ctx, p); reload()
             } catch (e: Exception) {
-                error = e.message ?: "Export impossible."
+                error = "Export impossible.\n" + describe(e)
             } finally {
                 busyClip = null
             }
